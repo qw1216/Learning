@@ -1,0 +1,730 @@
+react的特点,组件是react最重要的内容
+const title = React.createElement('h1', null, 'hello react');
+ReactDOM.render(title, document.getElementById('root'));
+第一步: 首先创建react元素 / 通过React.createElement()
+第一个参数是“元素名称”,,第二个参数是“元素属性”第三个参数是“元素的子节点”
+第二步: 渲染react元素 / 通过ReactDOM.render()
+第一个参数是“要渲染的react元素”,第二个参数是挂载点(就是获取元素)
+react脚手架
+初始化项目,命令: npx create-react my-app
+然后cd 进入my-app中 / 输入 npm start启动项目
+JSX简介
+JSX是javascript XML的简写,表示在script代码中写XML(html)格式的代码
+使用JSX语法创建react元素
+const title = <h1>hello JSX</h1>; / 使用JSX创建react元素
+使用ReactDOM.render()方法渲染react元素到页面 
+ReactDOM.render(title, document.getElementById("root")); / 渲染到页面
+JSX注意点,React元素的属性名使用驼峰命名法
+没有子节点的React元素可以使用/>结束 / 比如 <span />
+推荐: 使用小括号包裹JSX内容,从而避免js中的自动插入分号陷阱
+const title = (
+  <h1 className="title">
+    hello JSX
+  </h1>
+)
+JSX嵌入javascript表达式
+const name = 'kfbk';
+const title = (
+  <h1>
+  hello JSX, {name}
+  </h1>
+)
+注意点: React元素的属性名使用驼峰命名法
+JSX的列表渲染
+如果要渲染一组数据,应该使用数组的map()方法
+注意: 渲染列表的时候应该添加key属性
+map()遍历谁,就给谁,就给谁添加key属性
+const songs = [
+  { id: 2, name: "1" },
+  { id: 3, name: "2" },
+]
+const list = (
+  <ul>
+   {songs.map(item => <li key={item.id}>{item.name}</li>)}
+  </ul>
+)
+JSX的样式处理
+类名——calssName
+React组件的两种创建方式
+第一: 函数组件: 使用js的函数(或者箭头函数)创建组件
+注意点,第一:函数名称必须大写字母开头
+第二: 函数组件必须有return返回值,表示该组件的结构
+第三: 如果不想渲染任何内容,需要return一个null才不会报错
+渲染组件: 使用函数名作为组件标签名渲染
+渲染函数组件: 用函数名作为组件标签
+// 函数组件
+function Hello() {
+  return (
+    <div>这是我的第一个函数组件</div>
+  )
+}
+// 使用箭头函数组件
+const Hello = () => <div>这是我的第一个函数组件</div>;
+// 渲染组件
+ReactDOM.render(<Hello />, document.getElementById('root'))
+第二: 使用类创建组件,使用Es6的class创建组件
+第一: 类名必须使用大写字母开头
+第二: 类组件应该继承React.Component父类,从而可以使用父类提供的方法或属性
+第三: 类组件中必须提供render()方法
+第四: render()方法必须有返回值,表示该组件的结构
+第五: 如果不想渲染任何内容,需要return一个null才不会报错
+class Hello extends React.Component {
+  render() {
+    return (
+      <div>这是我的第一个函数组件</div>
+    )
+  }
+}
+把组件抽离为独立的JS问文件
+组件作为一个独立的个体,一般都会放到一个单独的JS文件中
+第一: 创建一个Hello.js, 在Hello.js中导入React, 然后在创建组件(函数或者类)
+第四: 必须导出组件: export default Hello(文件名)
+第五: 在index.js中导入组件 / import + 组件名 + from + 当前组件的位置
+
+// 导入react
+import React from "react";
+// 创建一个组件
+class Hello extends React.Component {
+   render() {
+      return (
+         <div>这是我的第一个抽离到JS文件中的组件</div>
+      )
+   }
+}
+// 导出组件
+export default Hello
+React事件绑定
+语法: on+事件名称= {事件处理程序}, 比如: onClick = { () => { }}
+注意: Reach事件采用驼峰命名法
+在类中组件中绑定事件
+class App extends React.Component {
+  handleClick () {
+    console.log('点击事件触发')
+  }
+  render () {
+    return (
+      <button onClick={this.handleClick}>点击</button>
+    )
+  }
+}
+ReactDOM.render(<App />, document.getElementById("root"));
+在函数组件中绑定事件
+在函数组件中是没有this的,设置处理程序直接写函数名
+function App() {
+ function handleClick() {
+    console.log("点击事件触发了");
+  }
+  return (
+     <button onClick={handleClick}>点击</button>
+  )
+}
+ReactDOM.render(<App />, document.getElementById("root"));
+React事件处理
+我们可以通过事件处理程序的参数获取到事件对象
+阻止浏览器的默认行为,让超链接不跳转 / e.preventDefault();方法可以阻止
+class App extends React.Component {
+  handleClick (e) {
+    e.preventDefault();
+    console.log('a标签的点击事件触发');
+  }
+ 
+  render() {
+    return (
+      <a href="http://baidu.com" onClick={this.handleClick}>百度</a>
+    )
+  }
+}
+ReactDOM.render(<App />, document.getElementById("root"));
+有状态组件和无状态组件
+函数组件又叫(无状态组件),类组件又叫(有状态组件)
+函数组件没有自己的状态(数据),只负责数据展示(静)
+类组件是有自己的状态的
+如果需要数据有变化,就使用类组件,如果不需要数据变化,就使用函数组件
+组件中的state和setState
+状态(state)即数据,是组件内部的私有数据,只能在组件内部使用
+state的值是一个对象,表示一个组件中可以有多个数据
+state基本使用
+获取状态(数据): 通过this.state / this.state.(count自己初始化的名称)
+通过{this.state.count} / 拿到初始化值后.渲染到页面中
+class App extends React.Component {
+  // 简化初始化state
+  state = {
+    count: 0,
+  };
+  render() {
+    return (
+      <div>
+        <h1>计数器: {this.state.count}</h1> // 拿到值渲染到页面
+      </div>
+    );
+  }
+}
+ReactDOM.render(<App />, document.getElementById("root"));
+setState()基本使用修改状态
+状态(数据)是可变的
+语法: this.setState({要修改的数据}) 
+注意: 不要直接修改state中的值,这个是错误的
+setstate()作用 / 第一: 修改state(修改了状态,每次拿到的都是新数据) 
+setstate()作用 / 第二: 更新UI(当我们(状态改变后,他会把最新的值渲染到页面中)
+class App extends React.Component {
+  state = {
+    count: 0,
+  };
+  render() {
+    return (
+      <div>
+        <h2>计数器: {this.state.count}</h2>
+        <button
+          onClick={() => {
+            this.setState({
+              count: this.state.count + 1,
+            });
+            console.log('计数器发生了改变');
+          }}
+        >
+          点击+1
+        </button>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<App />, document.getElementById("root"));
+从JSX中抽离事件处理程序
+JSX中参杂过多JS代码,会显得很混乱, 需要将逻辑抽离到单独的方法中
+render方法中的this指向的是组件实例
+抽离后,事件处理程序中的this值为undefined, 希望this指向组件实例
+事件绑定中this的指向
+第一种使用: 箭头函数调用方法,利用箭头函数自身不绑定this的特点
+<button onClick={() => this.onIncrement()}>点击+1</button>
+第二种使用: Function.prototype.bind()方法,利用bind()方法,将事件处理的this绑定到一起
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = { // 只要写了constructor就可以在里面初始化state了
+      count: 0,
+    };
+    this.onIncrement = this.onIncrement.bind(this);
+  }
+第三种使用: class的实例方法来解决
+利用箭头函数形式的class实例方法
+注意: 该语法是实验性语法,但是由于babel的存在可以直接使用
+onIncrement = () => {
+    console.log(this);
+    this.setState({
+      count: this.state.count + 1,
+    });
+  }
+React表单处理
+react中有两种表单处理方式 / 第一种受控组件 / 第二种非受控组件(dom方式)
+受控组件
+html中的表单元素是可以输入的,也有自己的可变状态
+但是在React中可变状态保存在state中,只能通过setState()方法来修改
+React将state与表单元素值的value绑定到一起,(由state的值来控制表单元素的值)
+受控组件步骤: 在state中添加一个状态,作为表单元素的value值(控制表单元素值的来源)
+给表单元素绑定change事件,将表单元素的值设置为sate的值(控制表单元素的变化)
+class App extends React.Component {
+  state = {
+    txt: "",
+  };
+  handleChange = e => { // 这里的e是事件对象
+    this.setState({
+      txt: e.target.value
+    })
+  };
+  render() {
+    return (
+      <div>
+        <input type="text" value={this.state.txt}
+        onChange={this.handleChange}
+        />
+      </div>
+    );
+  }
+}
+ReactDOM.render(<App />, document.getElementById("root"));
+注意: 文本框, textarea, 下拉框操作的都是value属性
+复选框操作的是checke属性
+非受控组件
+说明: 借助于 ref,使用原生dom方式来获取表单元素值
+ref的作用: 用来获取dom或组件
+组件通讯介绍
+组件是独立且封闭的单元,默认情况下,只能够使用组件的数据
+在组件化过程中,我们将一个完整的功能,拆封成为多个组件,以更好的完成整个应用的功能
+这个过程中组件之间不可避免的要共享某些数据,为了实现这些功能
+就需要打破组件的独立封闭性,这个过程就是组件通讯
+组件的props
+组件是封闭的,要接收外部数据应该通过props来实现
+props的作用: 接收传递给组件的数据 / 传递数据: 给组件标签添加属性
+接收数据: 函数组件中使用参数props接收数据
+props是一个对象,不论我们传递多少个属性都可以拿到
+通过函数组件获取props
+const Hello = props => {
+  console.log(props);
+  return (
+    <div>
+      <h2>props: {props.name}</h2>
+    </div>
+  );
+};
+// 传递参数
+ReactDOM.render(<Hello name="卡夫不卡" />, document.getElementById("root"));
+通过类组件获取props
+类组件中通过this.props来接收数据
+class Hello extends React.Component {
+  render () {
+    console.log(this.props);
+     return (
+       <div>
+         <h2> props: {this.props.name}</h2> // 通过this.props接收
+       </div>
+     )
+  }
+}
+// 传递数据
+ReactDOM.render(<Hello name="卡夫不卡" />, document.getElementById("root"));
+props特点: 可以给组件传递任意类型的数据
+如果想传递非字符串的数据,就必须使用 {}包裹起来, 也可以传递数组{[1,2,3,4,5]}
+props是一个只读的对象,只能读取属性的值,无法修改对象
+注意: 使用类组件,如果写了构造函数,应该将props传递给super(),否则构造函数中无法获取
+class Hello extends React.Component {
+  constructor (props) { // 推荐使用props作为constrcutor的参数使用   
+   super(props)
+   console.log(props);
+  }
+  render () {
+    console.log(this.props);
+     return (
+       <div>
+         <h2> props: {this.props.name}</h2>
+       </div>
+     )
+  }
+}
+组件通讯的三种返回式
+第一种: 父组件 -> 子组件
+第一步: 父组件提供要传递的state数据
+第二步: 给子组件添加属性,值为state中的数据
+第三步: 子组件中通过props接收父组件中传递的数据
+// 父组件
+class Parent extends React.Component {
+  state = {
+    name: "卡夫不卡",
+  };
+  render() {
+    return (
+      <div className="parent">
+        父组件:
+        <Child name={this.state.name} /> {/* 传递数据给子组件 */}
+      </div>
+    );
+  }
+}
+// 子组件
+const Child = (props) => { // 子组件通过props就可以拿到父组件传递的数据
+  console.log("子组件: ", props);
+  return (
+    <div className="child">
+      <p>子组件,接收到父组件的数据: {props.name}</p> {/*  渲染到页面 */}
+    </div>
+  );
+};
+ReactDOM.render(<Parent />, document.getElementById("root"));
+第二种: 子组件 -> 父组件
+利用回调函数,父组件提供回调,子组件调用,将要传递的数据作为回调函数的参数
+第一步: 父组件提供一个回调函数
+第二步: 将该函数作为属性的值,传递给子组件
+第三步: 子组件通过props调用回调函数
+第四步: 将子组件的数据作为参数传递给回调函数
+// 父组件
+class Parent extends React.Component {
+  state = {
+    parentMsg: "",
+  };
+  // 提供回调函数,用来接收数据
+  getChildMsg = (date) => {
+    console.log("接收到子组件中传递过来的参数: ", date);
+    this.setState({
+      parentMsg: date,
+    });
+  };
+  render() {
+    return (
+      <div className="parent">
+        父组件: {this.state.parentMsg}
+        <Child getMsg={this.getChildMsg} />
+      </div>
+    );
+  }
+}
+// 子组件
+class Child extends React.Component {
+  state = {
+    msg: "卡夫不卡",
+  };
+  handleClick = () => {
+    // 子组件调用父组件中传递过来的回调函数
+    this.props.getMsg(this.state.msg);
+  };
+  render() {
+    return (
+      <div>
+        子组件:<button onClick={this.handleClick}>点击,给父组件传递数据</button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Parent />, document.getElementById("root"));
+第三种: 兄弟组件 
+将共享状态提升到最近的的公共父组件中,由公共组件管理这个状态
+公共父组件职责,提供共享状态,提供操作共享状态的方法
+要通讯的子组件只需要通过props接收状态或者操作状态的方法
+// 父组件
+class Counter extends React.Component { // 在父组件中提供共享状态
+  state = {
+    count: 0,
+  };
+  onIncrement = () => { // 提供修改状态方法
+    this.setState({
+      count: this.state.count + 1,
+    });
+  };
+  render() {
+    return (
+      <div>
+        <Child1 count={this.state.count} />  {/* 把父组件中的状态通过属性传递给子组件 */}
+        <Child2 onIncrement={this.onIncrement}/>
+      </div>
+    );
+  }
+}
+const Child1 = (props) => {
+  // 子组件中通过props接收到父组件传递过来的数据
+  return <h1>计数器: {props.count}</h1>; // 子组件接收到父组件的数据后就可以展示到页面中, 直接props.count就接收到数据
+};
+const Child2 = (props) => {
+  return <button onClick={() => props.onIncrement()}>+1</button>;
+};
+ReactDOM.render(<Counter />, document.getElementById("root"));
+Context使用
+Context作用: 跨组件传递数据(比如,主题,语言等)
+首先调用 React.createContext()创建Provider(提供数据)和Consumer(消费数据)
+const { Provider, ConSumer } = React.createContext();// 创建context得到两个组件
+第二步: 使用Provider组件作为父节点
+class Element extends React.Component {
+  render() {
+    return (
+      <Provider> // 使用provider包裹起来作为父组件
+        <div className="app">
+          <Node />
+        </div>
+      </Provider>
+    );
+  }
+}
+第三步: 设置value属性,表示要传递的数据 / 在provider里面提供一个value属性
+第四步: 调用Consumer组件接收数据
+props深入
+props的children属性: 表示组件标签的子节点,当组件标签有子节点时,props就会有该属性
+const Index = (props) => {
+  console.log(props);
+  return (
+    <div>
+      <h1>组件标签的子节点: </h1>
+      {props.children}  {/* 这样就可以把子节点渲染到页面上 */}
+    </div>
+  );
+};
+ReactDOM.render(<Index>我是子节点</Index>, document.getElementById("root"));
+children属性与普通的props一样,值可以是任意数据类型的(也可以传组件和函数)
+const Test = () => <button>我是button组件</button>; // 设置另一个组件
+const Index = (props) => {
+  console.log(props);
+  return (
+    <div>
+      <h1>组件标签的子节点: </h1>
+      {props.children} {/* 这样就可以把children子节点渲染到页面上 */}
+    </div>
+  );
+};
+ReactDOM.render(
+  <Index>
+    <Test /> // 把一个组件传入到children属性中
+  </Index>,
+  document.getElementById("root")
+);
+props校验
+对于组件来说,props是外来的,无法保证组件使用者传入什么格式的数据
+props校验: 允许在创建组件的时候,就指定props的类型,格式等
+作用: 捕获使用组件时因为props导致的错误,给出明确的错误提示
+导入prop-type包 / 使用组件名.propTypes = {}给组件的props添加校验规则
+组件的生命周期
+组件的生命周期有助于理解组件的允许方式,完成更复杂的组件功能,分析组件错误原因
+组件的生命周期: 组件从被创建到挂载到页面中运行,再到组件不用时卸载的过程
+生命周期的每个阶段总是伴随着一些方法调用,这些方法就是生命周期的钩子函数
+ 钩子函数的作用: 为操作人员在不同阶段操作组件提供了时机
+注意: 只有类组件才有生命周期 / 使用class创建的组件才有生命周期
+生命周期的三个极阶段
+第一: 创建时(挂载阶段)
+执行时机,组件创建时(页面加载时)
+执行顺序: constuctor() --> render() --> componentDidMount
+class Element extends React.Component {
+  constructor(props) {
+    super(props);
+    console.warn("生命周期钩子函数: constructor"); // 第一个constructor钩子函数
+  }
+  componentDidMount() { // 进行dom操作
+    const title = document.querySelector("#title"); // 进行dom操作
+    console.log(title);
+    console.warn("生命周期钩子函数: componentDidMount"); // 第三个是componentDidMount钩子函数
+  }
+  render() {
+    console.warn("生命周期钩子函数: render"); // 第二个是render钩子函数
+    return (
+      <div>
+        <h2 id="title">统计豆豆被打的次数: </h2>
+        <button>打豆豆</button>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<Element />, document.getElementById("root"));
+constructor钩子函数,可以用于初始化state,为事件处理程序绑定this
+render钩子函数,每次组件渲染都会触发,渲染UI(注意: 不能调用setState)
+componentDidMount钩子函数,组件挂载(完成DOM渲染),作用: 发送网络请求,DOM操作
+componentDidMount主要用于进行dom操作,发送ajax请求,获取远程数据
+第二: 更新时(更新阶段)
+执行时机 / 第一种: setState() / 第二种: forceUpdate() / 第三种: 组件接收到新的props
+以上三者任意一种变化,组件就会重新渲染页面
+执行顺序: 先执行render()渲染完后,然后再执行componentDidUpdate(),这个钩子函数
+componetDidUpdate(),在render()完成渲染后执行,可以操作DOM,发送网页请求
+redner-props和高阶函数
+react组件复用概述
+如果两个组件中的部分功能相似或者相同
+处理方式: 复用相似的功能(使用函数封装)
+复用什么? state,操作seaState的方法(组件状态逻辑)
+render props模式思路
+思路: 将要复用的state和操作state的方法封装到一个组件中
+如何拿到组件中复用的state
+在使用组件时,添加一个值为函数的props,通过函数参数来获取(需要组件内部实现
+问题? 如何渲染UI
+使用该函数的返回值作为渲染的ui内容(需要组件内部实现)
+redner props模式
+首先创建组件,在组件中提供复用的状态逻辑代码(第一: 状态,第二: 操作状态的方法)
+class Mouse extends React.Component {
+  state = {
+    // 提供状态,鼠标位置
+    x: 0,
+    y: 0,
+  };
+  // 鼠标移动事件
+  handleMouse = (e) => {
+    this.setState({
+      x: e.clientX,
+      y: e.clientY,
+    });
+  };
+  componentDidMount() {
+    window.addEventListener("mousemove", this.handleMouse);
+  }
+  render() {
+    return this.props.render(this.state);
+  }
+}
+class Practice extends React.Component {
+  render() {
+    return (
+      <div>
+        <h2>render props 模式</h2>
+        <Mouse render={(mouse) => {
+            return <p>鼠标位置: {mouse.x} {mouse.y}</p>
+        }} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Practice />, document.getElementById("root"));
+children代替render属性
+注意: 并不是该模式叫render props就必须使用render的props,实际上可以使用任意名称
+把props是一个函数并且告诉组件要渲染什么内容的技术叫做: render props模式
+class Mouse extends React.Component {
+  state = {
+    // 提供状态,鼠标位置
+    x: 0,
+    y: 0,
+  };
+  // 鼠标移动事件
+  handleMouse = (e) => {
+    this.setState({
+      x: e.clientX,
+      y: e.clientY,
+    });
+  };
+  componentDidMount() {
+    window.addEventListener("mousemove", this.handleMouse);
+  }
+  render() {
+    return this.props.render(this.state);
+  }
+}
+class Practice extends React.Component {
+  render() {
+    return (
+      <div>
+        <h2>render props 模式</h2>
+        <Mouse render={(mouse) => {
+            return <p>鼠标位置: {mouse.x} {mouse.y}</p>
+        }} />
+        <Mouse render={mouse => {
+            return <img src={img} alt="22" style={{
+                position: 'absolute',
+                top: mouse.y  -180,
+                left: mouse.x  -180
+            }}/>
+        }}></Mouse>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Practice />, document.getElementById("root"));
+componentWillUnmount() {在组件卸载时移除}
+ 高阶组件
+目的: 实现状态逻辑复用
+采用包装模式,通过包装组件,
+高阶组件是一个函数,接收要包装的组件,返回增强后的组件
+高阶组件内部创建一个类组件,在类组件中提供要用的状态逻辑代码,
+通过props将复用的代码传递给被包装的组件WappedComponent
+使用步骤
+创建一个函数以with开头
+指定函数参数,参数应该以大写字母开头(作为要渲染的组件)
+在函数内部创建一个类组件,提供复用的状态逻辑代码,并且返回
+在该组件中,渲染参数组件,同时将状态通过props传递给参数组件
+调用该高阶组件,传入要增强的组件,通过返回值拿到增强后的组件,并将其渲染到页面
+react原理揭秘
+setState()的说明
+更新数据
+react中通过setState来更新状态和数据的
+setState()是异步更新数据的
+可以多次调用setState,但是使用该语法,后面的setState()不要依赖于前面的setState()
+可以多次调用setState(),但是只会触发一次重新渲染
+更新数据推荐写法
+class Practice extends React.Component {
+  state = {
+    count: 0,
+  };
+  handleClick = () => {
+    this.setState((state, props) => {
+      return {
+        count: state.count + 1,
+      };
+    });
+  };
+  render() {
+    return (
+      <div>
+        <h2>计数器: {this.state.count}</h2>
+        <button onClick={this.handleClick}>点击+1</button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Practice />, document.getElementById("root"));
+注意: 这个语法也是异步更新setState的
+里面的回调函数state表示最新的状态
+使用setState((state,props), => { })语法 / 
+参数state表示最新的state / 参数props表示最新的props
+第二个参数
+在状态更新(页面完成重新渲染)后立即执行某个操作
+语法: setState(update[callback])
+组件更新机制
+setState()的两个作用: 修改state和更新组件ui
+在组件中只要去调用setState方法,它就会去更新状态,然后把更新后的状态渲染到页面
+过程: 父组件重新渲染时,也会重新渲染子组件,但只会渲染当前组件子树(当前组件和所有)
+减轻state
+减轻state: 只存储跟组件渲染相关的数据,不用做渲染的数据不要放在state中
+避免不必要的重新渲染
+使用钩子函数: shouldComponentUpdate()
+作用: 通过返回值决定该组件是否重新渲染,返回true表示重新渲染,false表示不渲染
+触发时机: 更新阶段的钩子函数,组件重新渲染前执行
+避免不必要的重新渲染
+组件更新机制: 父组件更新会引起子组件也被更新,这种思路很清晰
+问题: 子组件没有任何变化时也会更新渲染
+如何避免不必要的重新渲染
+使用钩子函数 shouldComponentUpdate()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# react-material
+

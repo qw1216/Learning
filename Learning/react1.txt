@@ -1,0 +1,592 @@
+# react-material
+一定要注意区分「js语句代码」和「js表达式」的区别
+第一: 表达式,一个表达式会产生一个值,可以放在任何一个需要的地方
+表达式: a / a+b / demo() / arr.map() / function test() {}
+第二: 语句,比如: if(){} / for(){} / switch(){} / 这些都称为语句
+map方法遍历数组
+const date = ["Angular", "React", "Vue"];
+const Vdom = (
+  <div>
+    <h2>框架</h2>
+    <ul>
+      {date.map((item, index) => <li key={index}>{item}</li>)}
+    </ul>
+  </div>
+);
+ReactDOM.render(Vdom, document.getElementById("root1"));
+jsx语法
+创建虚拟dom时,不要写引号
+标签中要写js表达式,要使用{ }
+标签中样式的类名要用className指定
+标签中的内联样式要是style{{color: 'white'}},注意使用小驼峰
+只能有一个根标签
+首字母是小写,那么react就会去寻找相同的html标签
+如何首字母是大写,那么react就会去寻找同名的组件标签
+模块化组件编写方式
+组件: 用来实现页面局部功能效果的代码和资源的集合
+定义组件
+可以使用类定义组件和使用函数定义组件
+函数组件
+function Demo() {
+  return <h2>我是用函数定义的组件(适用于简单组件的定义)</h2>;
+}
+ReactDOM.render(<Demo />, document.getElementById("root"));
+执行了ReactDOM.render(<Demo />, document.getElementById("root"));
+首先react会解析组件标签,寻找Demo组件的定义位置
+react发现Demo组件是函数定义的,随后react去直接调用Demo函数,将返回的虚拟dom渲染
+组件函数中的this是underined,因为babel的翻译,开启了严格模式
+而类中的方法开启啦严格模式,所以this值是undefined
+在严格模式下禁止了自定义的this指向window,所以为undefined
+类式组件
+定义一个类式组件
+类式组件中必须有redner(){}方法
+react组件中使用一个名为render()的方法,接收输入的数据并返回需要展示的内容
+render中的this是指向我创建的实例对象
+react发现Demo组件是类定义的,react创建了一个Demo的实例对象
+通过创建的实例对象调用到了render方法,所以this就是指向这个创建的实例对象
+简单组件就是如果组件没有状态state就是一个简单组件
+如果一个组件有state状态它就是一个复杂组件就是有状态组件
+class Demo extends React.Component {
+  render() {
+    return (
+      <div>
+        <h2>我是类式组件</h2>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<Demo />, document.getElementById("root"));
+组件实例三大核心属性
+state
+组件的状态能够驱动页面的渲染
+有状态组件,处了使用外部数据(通过this.props访问)以外,组件还可以维护自己内部状态
+通过this.state访问,当组件的状态数据发生改变时,组件会再次调用render()方法重新渲染
+state是一个对象 / state的使用
+严格注意: state不可以直接修改,只有使用setState来修改
+class Weather extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isHot: false }; // 初始化状态
+  }
+  render() {
+    console.log(this);
+    return (
+      <div>
+        <h2>今天天气很{this.state.isHot ? "炎热" : "凉爽"}</h2>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<Weather />, document.getElementById("root"));
+setState
+setState是继承了React.Component的方法
+状态的修改一定要用setState
+解构赋值只有对象和数组才能够解构赋值
+class Weather extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isHot: false }; // 初始化状态
+  }
+  changeWeaather = () => {
+    const isHot = this.state.isHot;
+    this.setState({
+      isHot: !isHot,
+    });
+  };
+  render() {
+    console.log(this);
+    return (
+      <div>
+        <h2 onClick={this.changeWeaather}>
+          今天天气很{this.state.isHot ? "炎热" : "凉爽"}
+        </h2>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<Weather />, document.getElementById("root"));
+类中可以写赋值语句,例如: a=1给实例自身添加一个属性,名为a,值为1
+state = {isHot:true} // 可以直接在class类中直接写初始化状态
+组件类中定义回调函数,必须写成赋值语句+箭头函数,避免了this为undefined的问题
+props
+props专门用来收集从组件外部传入到组件内部的数据,是一个收集器
+props的children属性: 表示组件标签的子节点,当组件标签有子节点时,props就会有该属性
+class Person extends React.Component {
+  render() {
+    const { name, age, sex } = this.props; // 解构赋值
+    return (
+      <ul>
+        <li>姓名: {name}</li>
+        <li>年龄: {age}</li>
+        <li>性别: {sex}</li>
+      </ul>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Person name="卡夫不卡" age="18" sex="男" />,
+  document.getElementById("root")
+);
+因为props对象中的属性是只读的数据,是不能够对它进行修改的
+批量传递标签属性 {...}
+对props进行限制
+使用React.ProType对组件的进行限制
+Person.propTypes也是一个对象,这样才可以进行限制
+Person.propTypes = { // 语法格式为这个样,对Person这个组件进行显示
+  name: React.PropType.Number,
+};
+只需要写组件名+proType = { name } // 对里面的属性进行显示类型就可以
+函数组件的props
+function Person(props) {
+  return (
+    <ul>
+      <li>姓名: {props.name}</li>
+    </ul>
+  );
+}
+ReactDOM.render(<Person name="卡夫不卡" />, document.getElementById("root"));
+组件属性refs
+理解: 组件内部的标签可以定义ref属性来标示自己
+refs提供了一种方式,允许我们访问dom节点或在render方法中创建的react元素
+ref第一种写法: 字符串形式的ref
+class Demo extends React.Component {
+  render() {
+    return (
+      <div>
+        <input type="type" ref="input1" />
+        <button onClick={this.show}>点击提示数据</button>
+        <input
+          type="type"
+          ref="input2"
+          onBlur={this.show2}
+          placeholder="失去焦点提示数据"
+        />
+      </div>
+    );
+  }
+  show = () => {
+    const { input1 } = this.refs;
+    alert(input1.value);
+  };
+  show2 = () => {
+    const { input2 } = this.refs;
+    alert(input2.value);
+  };
+}
+
+ReactDOM.render(<Demo name="卡夫不卡" />, document.getElementById("root"));
+第二种写法:回调形式的ref
+class Demo extends React.Component {
+  render() {
+    return (
+      <div>
+        <input
+          type="type"
+          ref={c => this.input1 = c}
+        />
+        <button onClick={this.show}>点击提示数据</button>
+      </div>
+    );
+  }
+  show = () => {
+    console.log(this.input1.value);
+  };
+}
+ReactDOM.render(<Demo />, document.getElementById("root"));
+第三种方法: createRef形式的ref
+class Demo extends React.Component {
+  container = React.createRef(); // 直接赋值语句
+  render() {
+    return (
+      <div>
+        <input type="type" ref={this.container} />
+        <button onClick={this.show}>点击提示数据</button>
+      </div>
+    );
+  }
+  show = () => {
+    console.log(this.container.current.value);
+  };
+}
+ReactDOM.render(<Demo />, document.getElementById("root"));
+三大属性总结
+构造器总共就只调用一次
+render总共调用1+n / 第一次打开页面的时候会渲染一次,n是改变状态的次数
+构造器constructor调用后,然后在是render调用
+自己定义的事件回调一共调用是,我点击几次就点用几次 / 调用n次
+类式组件中的构造器可以省略不写
+如果写了构造器super必须调用,需要在构造器中通过this.props取值,那么props传递给super
+react事件处理
+通过on....属性指定事件处理函数(需要注意大小写)
+react使用自定义(合成事件),而不是使用的原生的dom事件
+react中的事件通过事件委托方式处理的(委托给组件最外层的元素)
+react中通过event.target得到发生事件的dom元素对象
+event.target是获得事件源
+class Demo extends React.Component {
+  render() {
+    return (
+      <div className="container" onClick={this.test}>
+        <button onClick={this.show1}>按钮1</button>
+        <button onClick={this.show2}>按钮2</button>
+        <div className="show3" onClick={this.show3}>
+          xxxxx
+        </div>
+      </div>
+    );
+  }
+  show1 = (event) => {
+    event.stopPropagation();
+  };
+  show2 = (event) => {
+    console.log("按钮2");
+    event.stopPropagation();  
+  };
+  show3 = () => {
+    console.log("按钮3");
+  };
+  test = () => {
+    console.log("test");
+  };
+}
+ReactDOM.render(<Demo />, document.getElementById("root"));
+非受控组件
+非受控组件: 表单中的数据,在需要的时候,“现取现用”(通过ref获取到节点,进行访问到value)
+非受控组件意思为: 受到state状态的控制就是表单中的输入项要跟state建立联系
+受控组件: 如果组件输入,输入类的dom,随着输入的内容,往状态里用,它就是一个受控组件
+受控组件
+必须对表单使用onChange事件来完成
+setState是一种合并,并不会造成其他数据的丢失
+受控组件: 表单中输入类的dom,输入,将值收集到state中,通过setState修改需要的值
+受控组件: 需要对表单元素使用onChange事件来获取该拜年的值
+class Login extends React.Component {
+  state = {
+    username: " ",
+    password: " ",
+  };
+  render() {
+    return (
+      <form onSubmit={this.handleLogin}>
+        用户名:
+        <input type="text" name="username" onChange={this.saveUsername} />
+        <br />
+        密码:
+        <input type="password" name="password" onChange={this.savePassword} />
+        <br />
+        <button>登录</button>
+      </form>
+    );
+  }
+  handleLogin = (event) => {
+    event.preventDefault(); // 阻止默认事件
+    alert(`用户名是: ${this.state.username}, 密码是: ${this.state.password}`);
+  };
+  saveUsername = (event) => {
+    this.setState({
+      username: event.target.value,
+    });
+  };
+  savePassword = (event) => {
+    this.setState({
+      password: event.target.value,
+    });
+  };
+}
+ReactDOM.render(<Login />, document.getElementById("root"));
+受控组件虽然避免了ref,
+username = (event) => { this.setState({username: event.targer.value})}
+保存用户名到state中, 需要简化代码
+高阶函数_函数柯里化
+高阶函数: 如果一个函数符合下面两个规范中的一个,那该函数就是一个高阶函数
+第一: 若A函数,接收的参数是一个函数,那么A就可以称之为高阶函数
+第二: 若A函数,调用的返回值依然是一个函数,那么A就可以称之为高阶函数
+常见的高阶函数: promise / setTimeout / arr.map() / bind()
+函数的柯里化: 通过函数调用继续返回函数的方式,实现多次接收参数最后统一处理的函数
+对象: 所有对象的属性名都是属于是字符串
+对象属性的操作有两种方法: / 第一种是通过.的方式 / 第二种是通过[变量]的方式
+person.a = b; / 其中a是不读变量的 / a是一个字符串
+person.[a] = b / 只有这样才能够读取到a变量的值
+class Login extends React.Component {
+  state = {
+    username: " ",
+    password: " ",
+  };
+  render() {
+    return (
+      <form onSubmit={this.handleLogin}>
+        用户名:
+        <input
+          type="text"
+          name="username"
+          onChange={this.saveFormDate("username")}
+        />
+        <br />
+        密码:
+        <input type="password" name="password" onChange={this.saveFormDate("password")} />
+        <br />
+        <button>登录</button>
+      </form>
+    );
+  }
+  saveFormDate = (type) => {
+    return (event) => this.setState({ [type]: event.target.value });
+  };
+  handleLogin = (event) => {
+    event.preventDefault(); // 阻止默认事件
+    alert(`用户名是: ${this.state.username}, 密码是: ${this.state.password}`);
+  };
+}
+ReactDOM.render(<Login />, document.getElementById("root"));
+不使用高阶函数和柯里化实现
+class Login extends React.Component {
+  state = {
+    username: " ",
+    password: " ",
+  };
+  render() {
+    return (
+      <form onSubmit={this.handleLogin}>
+        用户名:
+        <input
+          type="text"
+          name="username"
+          onChange={(event) => this.saveFormDate(event, "username")}
+        />
+        <br />
+        密码:
+        <input
+          type="password"
+          name="password"
+          onChange={(event) => this.saveFormDate(event, "password")}
+        />
+        <br />
+        <button>登录</button>
+      </form>
+    );
+  }
+  saveFormDate = (event, type) => {
+    this.setState({ [type]: event.target.value });
+  };
+  handleLogin = (event) => {
+    event.preventDefault(); // 阻止默认事件
+    alert(`用户名是: ${this.state.username}, 密码是: ${this.state.password}`);
+  };
+}
+ReactDOM.render(<Login />, document.getElementById("root"));
+
+组件的生命周期
+style={{opacity: 0.5}} // opacity: 0.5 / 设置文本的透明度
+类里面不能开定时器
+componentDidMount是组件完成挂载完毕
+render是组件调用的, componentDidMount也是组件调用的
+componentDidMount只调用一次,永远只能挂载一次
+挂载时最先渲染构造器constructor,然后在渲染componentWillMount将要挂载
+然后在调用render,最后在调用componentDidMount,完成挂载
+组件: 第一, 构造器constructor / 第二, 将要挂载componentWillMount 
+组件: 第三, 挂载render / 第四, 挂载完毕componeDidMount
+class Life extends React.Component {
+  state = {
+    opacity: 1,
+  };
+  render() {
+    const { opacity } = this.state; // 解构赋值
+    return (
+      <div>
+        <h2 style={{ opacity: opacity }}>React学不会,怎么办?</h2>
+        <button onClick={this.death}>不活啦</button>
+      </div>
+    );
+  }
+  componentDidMount() {
+    console.log("render");
+    console.log("componentDidMount");
+    this.timer = setInterval(() => {
+      let { opacity } = this.state;
+      opacity -= 0.1;
+      if (opacity <= 0) opacity = 1;
+      this.setState({
+        opacity: opacity,
+      });
+    }, 200);
+  }
+  componentWillUnmount() {
+    console.log("componentWillUnmount");
+    clearInterval(this.timer);
+  }
+  death = () => {
+    ReactDOM.unmountComponentAtNode(document.getElementById("root"));
+  };
+}
+
+ReactDOM.render(<Life />, document.getElementById("root"));
+挂载时最先渲染构造器constructor,然后在渲染componentWillMount将要挂载
+然后在调用render,最后在调用componentDidMount,完成挂载
+ReactDOM.unmountComponentAtNode(document.getElementById("root")) / 卸载组件
+componentWillUnmount(){} 函数表示将要卸载时的操作
+componeWillMount(){}组件将要挂载
+componentDidMount(){}组件挂载完毕,用来做初始化的事情
+shouldComponentUpdate(){}控制组件是否更新(该钩子可以进行组件的优化)
+shouldComponentUpdate(){}return返回一个布尔值 / 如果为true则开启,为false为关闭
+componentWillUpdate(){}组件将要更新
+componentDidUpdate(){}组件更新完毕
+首先shouldComponentUpdate是否更新返回布尔值 / 然后componentWillUpdate将要更新
+然后render进行更新,最后componentDidUpdate更新完成
+forceUpdate 强制更新 / 调用setState(),执行两件事情: 1. 更新状态 / 2. 调用render()更新
+render调用: 1+n次 / 第一次挂载会更新render,然后n是更新几次就调用几次
+this.forceUpdate()调用,关闭阀门后点击setState()页面不渲染,因为没有调用render()
+关闭阀门后setState()被掐断了render的渲染,但底层还是在更新,因为没调render不渲染页面
+一旦触发this.forceUpdate(),render()就会强制更新,全部的更新都会渲染到页面中去
+父组件传递数据给子组件 / 需要在子组件标签中写要传递的数据 / 这是父传子
+如果要把父组件的数据渲染到子组件,需要通过this.props.名称,来渲染到页面
+父组件提供数据,子组件接收数据,在子组件中写componentWillReceiveProps钩子函数
+子组件先接收数据componentWillReceiveProps / 选择是否开启shouldComponentUpdate
+然后子组件准备更新componentWillUpdat / 然后子组件进行更新render
+最后子组件更新完毕componentDidUpdate
+class Count extends React.Component {
+  constructor() {
+    console.log("constructor");
+    super();
+    this.state = {
+      count: 0,
+    };
+  }
+
+  add = () => {
+    const { count } = this.state;
+    this.setState({
+      count: count + 1,
+    });
+  };
+  death = () => {
+    ReactDOM.unmountComponentAtNode(document.getElementById("root"));
+  };
+  must = () => {
+    this.forceUpdate();
+  };
+  componentWillMount() {
+    console.log("componentWillMount");
+  }
+  componentDidMount() {
+    console.log("componentDidMount");
+  }
+  shouldComponentUpdate() {
+    console.log("shouldComponentUpdate");
+    return false;
+  }
+  componentWillUpdate() {
+    console.log("componentWillUpdate");
+  }
+  componentDidUpdate() {
+    console.log("componentDidUpdate");
+  }
+  render() {
+    console.log("render");
+    const { opacity } = this.state; // 解构赋值
+    return (
+      <div>
+        <h2>当前求和为: {this.state.count}</h2>
+        <button onClick={this.add}>点击+1</button>
+        <button onClick={this.death}>点击删除组件</button>
+        <button onClick={this.must}>强制更新</button>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<Count />, document.getElementById("root"));
+父组件render生命周期
+父组件传递数据给子组件 / 需要在子组件标签中写要传递的数据 / 这是父传子
+如果要把父组件的数据渲染到子组件,需要通过this.props.名称,来渲染到页面
+父组件提供数据,子组件接收数据,在子组件中写componentWillReceiveProps钩子函数
+子组件先接收数据componentWillReceiveProps / 选择是否开启shouldComponentUpdate
+然后子组件准备更新componentWillUpdat / 然后子组件进行更新render
+最后子组件更新完毕componentDidUpdate
+class Son extends React.Component {
+  componentWillReceiveProps() {
+    console.log("Son-componentWillReceiveProps");
+  }
+  shouldComponentUpdate() {
+    console.log("Son-shouldComponentUpdate");
+    return true;
+  }
+  componentWillUpdate() {
+    console.log("Son- componentWillUpdate");
+  }
+  componentDidUpdate() {
+    console.log("Son-componentDidUpdate");
+  }
+  render() {
+    console.log("Son-render");
+    return <h2>子组件,收到父级给我的车是: {this.props.carname}</h2>;
+  }
+}
+ReactDOM.render(<Parent />, document.getElementById("root"));
+总结生命周期
+初始化阶段: 由ReactDOM.render()触发-----初次渲染
+初始化阶段流程: 
+先走constructor(){}构造器 / 然后走componetWillMount(){}将要挂载 
+然后再走render(){}更新 / 最后componentDidMount(){}完成更新
+更新阶段: 由组件内部this.setState()或父组件重新render触发
+更新阶段流程:
+先走shouldComponentUpdate(){}选择是否更新 / 然后走componentWillUpdate()将要更新
+然后走render(){}去更新 / 最后componentDidUpdate(){}完成更新
+卸载组件: 由ReactDOM.unmountComponentAtNode()触发
+卸载阶段流程:
+卸载组件: ReactDOM.unmountComponentAtNode(document.getElementById("root))
+直接走componentWillUnmount(){} / 调用卸载组件马上要卸载时,react会调用该钩子函数
+如果不想更改状态并且还想更新render就走强制更新this.forceUpdate();
+render(){}里面写主要渲染的内容,很重要
+componentDidMount(){}一般做一些初始化的事情: 比如开启定时器,发送ajax请求,消息订阅
+componentWillUnmount(){}一般做一些收尾的事情: 比如清除定时器,取消订阅消息
+新版本生命周期
+getDerivedStateFromProps
+static getDerivedStateFromProps(props, state) {
+    console.log(" getDerivedStateFromProps");
+    return null;
+  }
+必须return返回一个状态里的对象或者null
+getDerivedStateFromProps(){}该钩子函数可以接受到props,和state
+当组件中的state完全取决于: 外部传来的props时,就要使用该钩子函数
+使用该getDerivedStateFromProps(){}钩子函数,使用有问题,组件的更新会受到影响
+注意: 该钩子函数极少使用
+getSnapshotBeforeUpdate
+getSnapshotBeforeUpdate()在最近一次渲染输出,提交到dom节点之前调用
+它使得组件能在发生更改之前从dom中捕获一些信息
+此生命周期的任何返回值将作为参数传递给componentDidUpdate()
+这个钩子函数调完后页面不更新,页面真实数据没来得及更改前调用
+Diffing算法
+利用map方法遍历
+class Person extends React.Component {
+  state = {
+    person: [
+      { id: "001", name: "卡夫不卡", age: 20 },
+      { id: "002", name: "卡夫卡", age: 21 },
+    ],
+  };
+  render() {
+    return (
+      <div>
+        <ul>
+          {this.state.person.map((item, index) => {
+            return (
+              <li key={index}>
+                {item.name}--{item.age}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<Person />, document.getElementById("root"));
+react/vue中的key有什么作用? (key的内部原理是什么?)
+为什么遍历列表时,key最好不要用index
+功能界面的组件化编码流程（通用）
+拆分组件：使用组件实现静态页面效果
+实现动态组件
+动态显示初始化数据
+第一：数据类型
+第二：数据名称
+第三：保存在那个组件
+第四： 交互（从绑定事件监听开始）
+使用组件化尽量让一个组件就是一个文件夹，里面存放着组件和组件的 css 以及图片 

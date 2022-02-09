@@ -1,0 +1,163 @@
+// 子元素选择器: .div>a;只选择离父级元素最近的子级元素
+		// 并集选择器: 并集选择器可以选择多组标签定义相同的样式,用于集体声明
+		// 伪类选择器: :focus用于选取获得焦点的表单元素
+		// 元素显示模式:就是元素以什么方式进行显示一行只能放一个div, 一行可以放很多个span
+		// 块级元素有: h1~h6, p, div, ul, ol, li等,其中div是最典型的块元素
+		// 块级元素特点: 独占一行,高度宽度内外边距可以控制,宽度默认父元素100%,是容器及盒子
+		// 行内元素有: a, strong, b, em, i, del, s, ins, u, span, span最典型的行内元素
+		// 行内元素特点: 一行可以放多个,高度宽度直接设置无效,默认宽度是本身内容的宽度,容纳文本
+		// 行内块元素: img, input, td, 它们有块元素和行内元素的特点,我们称为行内块元素
+		// 元素的转换: 转换为块元素: display:block 转换为行内块元素: display: inline-block
+		// 单行文字垂直居中: 让文字的行高等于盒子的高度就可以让文字在当前盒子内垂直居中
+		// 背景颜色: transparent,透明的 背景图片: image:url;
+		// 背景平铺: repeat背景平铺, no-repeat背景不平铺
+		// 背景位置: position 
+		// 背景颜色半透明 rgba(0,0,0,0.3) 黑色半透明
+		// CSS三大特性:层叠性,相同选择器设置相同样式,此时一个样式会被覆盖(层叠)另一个冲突的样式
+		// 层叠性: 样式冲突,遵循就近原则,那个样式离结构近就执行那个样式
+		// 继承性: 子标签会继承父标签的某些样式(text-,font-,line-以及color属性)
+		// 优先级: 当同一个元素指定多个选择器,就会有优先级的产生,选择器不同,则根据选择器权重执行
+		// 优先级: 继承的权重是0,如果该元素没有直接选中,不管父元素权重多高,子元素得到的权重都是0
+		// 权重叠加: 复合选择器会有权重叠加的问题
+		// padding内边距可以撑开盒子,我们可以非常巧妙的运用,可以不用给每个盒子宽度,直接给padding
+		// 如何盒子没有指定宽度高度属性,此时padding不会撑开盒子大小
+		// 行内元素或者行内块元素水平居中给其父元素添加 text-aling-center,即可
+		// 外边距合并-嵌套块级元素垂直外边距塌陷; 给父元素添加overflow:hidden.即可
+		// 圆角边框: border-radius;属性设置元素的外边框圆角 
+		// 盒子阴影: box-shadow属性为盒子添加阴影 box-shadow: 10px 10px 10px 10px black
+		// 浮动特性: 浮动元素会脱离标准流,浮动元素一行显示并且元素顶部对齐,浮动元素有行内块元素的特性
+		// 浮动特性: 浮动的盒子不再保留原先的位置,父级宽度装不下浮动的盒子,多出的盒子会另起一行显示
+		// 浮动的特性: 浮动的盒子只会影响浮动盒子后面的标准流不会影响前面的标准流
+		// 清除浮动:父级不给高度,但是子级浮动不占位置,最后父级盒子高度为0,就会影响下面标准流的盒子
+		// 清除浮动:清除浮动的本质是清除浮动元素造成的影响,如果父级盒子有高度,则不需要清除浮动
+		// 清除浮动的方法: 给父级添加:overflow:hidden,给父级添加after元素,给父级添加双伪元素
+		// 给父级添加after伪元素清除浮动: 
+		// .box:after {
+		// content: ''; 
+		// display: block; 
+		// height: 0;
+		// clear: both;
+		// visibility: hidden;
+		// }
+		// 给父级添加双伪元素清除浮动:
+		// .box:after,
+		// .box: before {
+		// content: '';
+		// display: table; 模式转换为表格
+		// 	}
+		// .box: after {
+		// 	clear: both;
+		// }
+		// 定位: 定位由两部分组成, 1.定位模式, 2.边偏移
+		// position: relative / absolute / fixed
+		// 相对定位(relative)相对定位是元素在移动位置的时候,相对于它原来的位置来移动的
+		// 相对定位(relative)相对定位原来的位置继续占有,(不脱离标准流,继续保留原先的位置)
+		// 绝对定位(absolute)绝对定位是元素在移动位置的时候,是相对于它祖先元素来移动的
+		// 绝对定位(absolute)如果没有祖先元素或者祖先元素没有定位,则以浏览器为准来移动位置
+		// 绝对定位(absolute)如果祖先元素有定位,则以最近一级有定位祖先元素为参考点移动位置
+		// 绝对定位(absolute)不再占有原先的位置(脱离标准流的)
+		// 子绝父相:因为父级需要占有位置,因此是相对定位,子盒子不需要占有位置,则是绝对定位
+		// 固定定位(fixed)固定定位是元素固定于浏览器可视区的位置,以浏览器可视窗口为参照点移动位置
+		// 固定定位(fixed)跟父元素没任何关系,不随滚动条滚动而滚动,固定定位不再占有原先的位置
+		// 固定定位(fixed)固定在版心右侧位置: left走50%,然后在margin-left走版心盒子一半
+		// 粘性定位(sticky)粘性定位被认为是相对和固定定位的混合,浏览器可视窗口移动元素
+		// 粘性定位(sticky)粘性定位占有原先的位置,必须添加,上,下,左,右,其中的一个才有效
+		// 定位叠放次序使用z-inedx来控制盒子的前后次序
+		// 加了绝对定位的盒子不能通过margin:0 auto实现水平居中的
+		// 绝对定位盒子水平垂直居中算法: left走50%,然后在margin-left走自己盒子负的一半
+		// 定位特殊性:行内元素添加绝对定位或者固定定位,可以直接设置宽度和高度,和浮动类似
+		// 浮动元素不会压住下面标准流的文字,绝对和固定定位会压住下面标准的所有内容
+		// 元素的显示与隐藏:本质让一个元素在页面中隐藏或者显示出来:
+		// 1. display显示隐藏 2. visibility显示隐藏 3. overfolw溢出显示隐藏
+		// 1. display: 属性用于设置一个元素如何显示,隐藏元素后,不再占有原来的位置
+		// 1. display:none;隐藏对象, display:block;显示元素 
+		// 2. visibility: 属性用于指定一个元素应可见还是隐藏, 隐藏元素后,继续占有原来的位置
+		// 2. visibility:hidden;元素隐藏, visibility: visible;显示元素
+		// 3. overflow: 属性指定元素溢出时会发生什么
+		// 3. overflow:hidden;溢出部分隐藏, overflow:auto;溢出显示滚动条
+		// 取消表单轮廓线: outline:none;可以去掉默认的蓝色边框
+		// 防止拖拽文本域: resize:none; 取消文本域拖拽效果 
+		// vertical-align属性使用场景: 经常用于设置图片或者表单(行内块元素)和文字垂直居中对齐
+		// vertical-align用于设置一个元素的垂直对齐方式,只对行内元素或者行内块元素有效
+		// vertical-align:bottom;图片和文字底线对齐 vertical-align:middle;图片和文字中线对齐
+		// 图片底侧空白缝隙问题: 原因是行内块元素会和文字的基线对齐,主要解决方法与有两种:
+		// 1. 给图片添加 vertical-align:middle/bottom/top等,可以解决问题
+		// HTML5的新增语义化标签: header:头部标签 nav:导航标签 article内容标签 section:定义文档某个区域 aside:侧边标签 footer:尾部标签
+		// HTML5新增input类型: type="date"必须输入日期类型 type="time"必须输入时间类型 
+		// HTML5新增input类型: type="number"必须输入数字类型 type="tel"必须输入手机号码类型 type="search"搜索框
+		// HTML5新增input属性: required 表单内容不能为空 placeholder提示文本默认存在值将不显示 auotfocus自动获得焦点 autocomplete:off/on;
+		// css3新增选择器: 1. 属性选择器 2. 结构伪类选择器 3. 伪元素选择器
+		// 1. 属性选择器: input[valeu]{选择带有value这个属性的表单} input[type=text]{选择带有type同时有text这个值的表单}
+		// 1. 属性选择器: div[class^=icon]{选择首先是div,然后具有calss属性,并且属性值必须是icon开头的这些元素}
+		// 1. 属性选择器: div[class$=data]{选择首先是div,然后具有class属性,并且属性值必须是data结尾的这些元素}
+		// 1. 属性选择器: div[class*val]{选择首先是div,然后具有class属性,并且属性值只要是有val的都选择出来}
+		// 注意:类选择器,属性选择器,伪类选择器,它们的权重都是 0,0,1,0
+		// 2. 结构伪类选择器: ul li:first-child {选择ul中的第一个元素} ul li:last-child{选择ul中的最后一个元素}
+		// 2. 结构伪类选择器: ul li:nth-child(2){选择ul中的第二个元素} ul li:nth-child(even){选择ul中的所有偶数元素}
+		// 2. 结构伪类选择器: ul il:nth-child(odd){选择ul中的所有奇数元素} ul il:nth-child(n){选择ul中的所有元素}
+		// 3. 伪元素选择器: 可以利用css创建新的标签元素,而不需要HTML标签
+		// 3. ::before在元素内部的前面插入内容 ::after在元素内部的后面插入内容
+		// 3. before和after创建一个元素,但是属于行内元素,必须具有,content属性才能生效, 伪元素选择器和标签选择器一样, 权重为 0,0,0,1
+		// 4. css盒子模型border-box: 如果盒子模型我们改为了box-sizing:border-box,那么padding和border就不会撑大盒子(前提padding和border不会超过width宽度)
+		// 5. css滤镜filter:属性将模糊或者颜色偏移等图形效果应有于元素
+		// 6. filter:blur(5px); blur是一个函数,里面的数值越大图片越模糊
+		// 7. filter:contrast(200%) contrast函数输入图像的对比度
+		// 8. filter:shadow(10px 10px 10px black)函数对图像应用阴影效果
+		// 9. filter:hue-rotate(360deg)函数在输入图像上应用色相旋转,angle值为0图像无变化,angle值超过360deg相当于绕一圈,配合动画来使用
+		// 9. 计算盒子宽度calc函数: width:calc(100%-30px); 子级盒子永远比父级盒子小30px
+		// 9. css过渡: transition是css3中具有颠覆性的特征之一,从一个状态,渐渐过渡到另一个状态,transition经常和:hover一起搭配使用
+		// 9. transition语法格式: transition: all .5s  注意:过渡是谁做过渡给谁添加过渡效果
+		// 2D转换(transform),可以实现元素的位移,旋转,缩放等效果
+		// 2D旋转之移动(translat)可以改变元素在页面中的位置,类似于定位
+		// 2D旋转语法格式: transform(translate(x,y)) x就是x轴上移动,y就是y轴上移动位置,中间用逗号隔开
+		// translate最大的优点:不会影响到其他元素的位置 
+		// translate(-50%, -50%); 盒子x轴走自己宽度的一半,y轴走自己高度的一半
+		// translate:对行内元素是无效的
+		// transform:rotate(deg)2D旋转是指元素在二维平面上顺时针或者逆时针旋转
+		// rotate里面跟度数,单位是 deg, 角度为正时,顺时针旋转,负时,逆时针 默认旋转的中心点是元素的中心点
+		// 2D旋转之转换中心点transform-origin; 语法格式:transform-origin: x y; 
+		// 2D旋转之转换中心点,注意后面的参数,x和y用空格隔开
+		// 语法: transform-origin: left bottom; 以左下角为中心点移动位置,注意两个参数之间是用空格隔开的,可以是px像素
+		// 2D旋转之缩放scale 给元素添加上这个属性就能控制它放大还是缩小
+		// 语法格式: transform:scale(x,y) 注意x和y用逗号隔开 
+		// transform:scale(x,y) 里面写数字不跟单位,数字就是倍数的意思,1就是1倍 2就是2倍的意思
+		// transform: scale(2, 1); 修改了宽度为原来的2倍, 高度不变
+		// transform: scale(0.5); 我们可以进行缩小 小于1就是缩放,宽高等比例缩放
+		// transform: scale(x, y);优势之处: 不会影响其他的盒子,而且可以设置缩放中心点
+		// 动画(animation): 制作动画分为两步: 1. 先定义动画,2. 在调用动画
+		// 1. @keyframes定义动画,后面跟一个动画名称
+		// 2. 动画序列: 0%是动画开始, 100%是动画结束,等同于 from和to
+		// 3. 定义动画:
+		// @keyframes move {
+		// 	开始状态 
+		//	form {
+		//		transform: translatex(0px);
+		//	}
+		//	结束状态 
+		//	to {
+		//		transform: translatex(1000px);
+		//	}
+		// }
+		// 调用动画-谁做动画谁就调用这个动画:
+		// animation-name: move; 动画名称
+		// animation-duration: 5s; 持续事件,花多少时间走完 animation
+		// animation-iteration-count:infinite; 无限循环
+		// 动画简写 animation: move 5s linear infinite; linear匀速
+		// 3D旋转: x轴:水平向右 y轴垂直向下 z轴:垂直屏幕 z轴往外面是正值,往里面是负值
+      // transform:translateZ(100px) 仅仅在Z轴上移动(一般使用单位px)
+      // translateZ(100px) 向外移动100px(向我们的眼睛来移动的),向外移动是正值,向里移动是负值
+      // 透视(perspective): 透视就是在网页中产生3D效果,就是人的眼睛到屏幕的距离
+		// 透视写在被观察元素的父级盒子上面的
+		// 3D旋转rotate3d(): 3D旋转可以让元素在三维平面内沿着x轴,y轴,z轴或者自定义进行旋转
+		// transform:rotateX(45deg) 沿着x轴方向旋转45度
+		// transfor:rotateY(45deg) 沿着y轴方向旋转45度
+		// transform:rotateZ(45deg) 沿着z轴方向旋转45度
+		// 3D呈现 transform-style: 控制子元素是否开启三维立体环境 
+		// 3D呈现 transform-style: transform-style:preserve-3d;子元素开启立体空间
+		// 3D呈现 transform-style:transform-style:preserve-3d; 代码写给父级,影响的子级盒子
+        // 浏览器的私有前缀: 
+		// -moz-: 代表firefox浏览器私有属性 火狐的
+		// -ms-: 代表ie浏览器私有前缀 IE的
+		// -webkit-: 代表safari, chrome私有属性 苹果和谷歌的
+		// -o-: 代表Opera私有属性 欧朋的
+		// -webkit-border-radius: 10px;# react-material

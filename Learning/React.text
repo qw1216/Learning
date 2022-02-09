@@ -1,0 +1,278 @@
+# react-material
+
+函数中的 this 指向是 undefined 因为 babel 开启了严格模式
+render 中的 this 指向的是组件的实例对象
+state 是一个对象，状态是组件实例上的
+state 不能直接修改，状态必须使用 setState 来修改
+使用 this.setState({ })，来修改状态的值
+setState 进行更新是一种替换，并不是替换掉原来的
+构造器调用 —— 1次，构造器是最先调用的
+render 调用 1+n 次，第一次是初始化的时候调用，然后渲染一次页面就调用
+事件处理一般是触发几次就调用几次
+只要修改setState，状态修改完后就会再一次调用 render 更新页面
+通过更新组件的 state 来更新对应的界面显示（重新渲染组件）
+每一次更新 render 都会对页面进行渲染
+props 主要用于组件通讯交互时使用
+每一个组件对象都有 props 属性
+组件标签的所有属性都保存在 props 里面
+展开运算符 {...}，可以展开数组，可以用于连接一个数组，[...arr,...arr1]
+展开运算符 {...}，可以展开函数，
+number.reduce((preVale, currentValue)=>{ return })，数组的 reduce 求和
+        function sum(...number) {
+            return number.reduce((preValue, currentValue) => {
+                return preValue + currentValue;
+            })
+        }
+        alert("求和为：" + sum(1, 2, 3, 4, 5, 6))Ï
+展开运算符不能够展开对象
+ props 是只读的不允许更改值
+react 中构造器仅用于，通过给 this.state 赋值对象初始化内部 state 和给事件绑定实例
+react 挂载前，会调用构造函数，在为 React.Component 子类实现构函数时，调 super
+组件内的标签可以定义 ref 属性来标示自己
+React.createRef 调用后可以返回一个容器，该容器可以存储被 ref 所标示的节点
+React.createRef 该容器是专人专用的，只能够一个容器使用
+ 通过 onxxx 属性指定事件处理函数（注意大小写）
+react 中的事件是通过委托方式处理的，通过 event.target 得到发生事件的 DOM 元素
+受控组件可以省略到 ref 的操作
+卸载组件，ReactDOM.unmountComponentAtNode(document.getElementById('root'));
+rendern 调用的时机，初次渲染的时候会调用以及状态更新会调用
+componentDidMount(){ } 组件挂载到页面之后调用，组件挂载完毕调用
+componentWillUnmount(){ } 组件将要被卸载时调用，用于清除定时器之类的
+react 组件对象包含一系列钩子函数生命周期回调，在特定时间点调用
+我们定义组件时，在特定的生命周期回调函数中做特定的工作
+挂载时生命周期的流程
+constructor 构造器最先调用
+componentWillMount 表示组件将要挂载的时候调用
+render 表示组件开始挂载渲染页面
+componentDidMount 表示组件完成挂载的时候调用
+父组件 render 一共有三条线
+调用第二条线调用 setState()，shouldComponentUpdate()，组件是否被更新
+只要你调用 setState()，react 就会更新状态渲染页面调用 render
+调用 setState 之后 react 调用了 shouldComponentUpdate 这个钩子是个阀门
+shouldComponentUpdate 取决于组件是否更新，应不应该去更新页面，都靠它
+如果 shouldComponentUpdate 返回 true 就能更新，如果返回 false 本次不能更新
+render 更新前 react 会调用 shouldComponentUpdate，返回 true 就更新，反之false
+componentWillUpdate 组件将要更新
+componentDidUpdate 组件完成更新
+父组件 render 第三条线
+forceUpdate() 强制更新，不更改状态中的属性，组件也能更新，直接绕过阀门钩子
+父组件 render 第一条路
+父组件重新 render 子组件就会响应 componentWillReceiveProps 钩子函数
+表示子组件将要接收父组件传递过来的 props， componentWillReceiveProps(){ }
+componentWillReceiveProps 可以接受到 props 作为参数
+生命周期总共分为三个阶段：
+初始化阶段：由 ReactDOM.render() 触发初次渲染
+先走 constructor(){}
+然后走 componentWillMount(){}
+然后走 render(){}
+最后走 componentDidMount(){}
+更新阶段：由组件 this.setState() 或者父组件重新 render 触发
+父组件中调用 render 子组件也要调用 render
+先走 shouldComponentUpdate(){}
+然后走 componentWillUpdate(){}
+然后走 render(){}
+最后走 componentDidUpdate(){}
+卸载组件：由 ReactDOM.unmountComponentAtNode(document.getElementById('rot'))
+卸载组件前会调用 componentWillUnmount(){} 钩子函数
+常用的钩子函数
+componentDidMount ====> 初始化的事，开定时器，发送网络请求，请阅消息
+componentWillUnmount ====> 收尾的事，清除定时器，取消订阅，
+旧的生命周期废弃了三个钩子
+componentWillReceiveProps
+componentWillMount
+componentWillUpdate
+通过提出了两个新的钩子
+getDerivedStateFromProps
+getSnapshotBeforeUpdate
+getDerivedStateFromProps(props, state){}，如果state的值任何事欧都取决于props使用
+react ajax
+react 本身只关注于界面，并不包含发送 ajax 请求的代码
+但是前端应用需要通过 ajax 请求与后台进行交互（json 数据）
+react 应用中需要集成第三方 ajax 库（或者自己封装）
+常用的 ajax 请求库
+jQuery 比较重，如果需要另外引用不建议使用
+axios 轻量级，建议使用
+封装 XmlHttpRequest 对象的 ajax
+promise 风格
+可以用在浏览器端和 node 服务器端
+React 路由
+SPA 的理解
+是单页面 Web 应用
+整个应用就是有一个完成的页面
+点击页面中的链接不会刷新页面，只会做页面的局部更新
+数据都需要通过 ajax 请求获取，并在前端异步展示
+路由的理解
+一个路由就是一个映射关系（key:value）
+key 为路径，value 可能是 function 或者 component
+路由分类
+后端路由：value 是function，用来处理客户端提交的请求
+注册路由：router.get(path,function(req, res))
+工作过程：当 node 接收到一个请求时，根据请求路径找到匹配的路由
+调用路由中的函数来处理请求，并且返回响应数据
+前端路由：
+浏览器端路由，value 是 component，用于展示页面内容
+注册路由：<Router path='/test' component={Test}
+工作过程：当浏览器的 path 变为 /test 时，当前路由组件会变成 Test 组件
+react-router-dom 的理解
+react 的一个插件库
+专门用来实现 SPA 应用
+基于 react 的项目基本都会用到此库
+路由使用
+react 中靠路由链接实现切换组件
+export default class App extends Component {
+  render() {
+    return (
+      <div>
+        <div>
+          <h2>React Router Demo</h2>
+        </div>
+          <div>
+            <Link to="/home">Home</Link>
+            <div>
+              <Link to="/about">About</Link>
+            </div>
+          </div>
+          <div>
+            <Route path="/about" component={About} />
+            <Route path="/home" component={Home} />
+          </div>
+      </div>
+    );
+  }
+}
+明确好界面中的导航区，展示区
+import { Link,  Route } from "react-router-dom"; // 引入这个库
+导航区需要使用 Link 标签，需要引入这个 Link 组件，这个称为编写一个路由链接
+<Link to="/home">Home</Link> // 这是一个链接
+展示区写 Route 标签进行匹配，这个称之为注册一个路由
+<Route path="/about" component={About} /> // 这个是跳转的组件
+在 App 组件的最外层包裹一个 <BrowserRouter><BrowserRouter/>
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+); // 包裹这个最大的 App 组件
+组件分为，一般组件和路由组件的区别
+一般组件：<Demo>
+路由组件：<Route path="/about" component={About}>
+存放位置不同
+一般组件：放在 components 这个文件夹中
+路由组件：放在 pages 这个文件夹中
+一般组件如果没有传递 props 是接收不到 props
+一般组件：写组件标签时传递了什么，props 就能收到什么
+路由组件能够接收到 props 
+路由组件会收到路由器传递的三个重要的 props 信息
+分别是： history
+分别是：location
+分别是：match
+NavLink 可以实现路由链接的高亮，通过 activeClassName 指定样式名
+标签体内容是一种特殊的标签属性
+通过 this.props.children 可以获取标签体内容
+Switch 组件
+使用 Switch 组件把所有注册的路由包裹在里面提高效率
+使用了 Switch 如果匹配到了路由，就不会在往下面继续匹配了，提高了效率
+通常情况下，path 和 component 是一一对应的关系
+Switch 可以提高路由匹配效率（是单一匹配）
+路由的精准匹配和模糊匹配
+默认使用的是模糊匹配（输入的路径：必须包含要匹配的路径，并且顺序要一致）
+开启严格模式：<Route exact={true} path="/about" component={About}>
+严格模式不要随便开启：需要时再开启，有时开启会导致无法继续匹配二级路由
+react 的 Redirect 重定向
+一般写在所有路由注册的最下方，当所有路由都无法匹配时，跳转到 Redirect 指定上
+<Switch>
+<Route path="/about" component={About}/>
+<Route path="/home" component={Home}/>
+<Redirect to="/about"> // 直接这么使用就可以
+</Switch>
+二级路由，嵌套路由的使用
+注册子路由时要写上父路由的 path 值
+路由的匹配是按照注册路由的顺序进行的
+向路由组件传递参数数据
+params 参数
+路由链接（携带参数）：<Link to="/demo/test/tom/18">详情</Link>
+<Link to={`/home/message/detail/${msgObj.id}/${msgObj.title}`}> {msgObj.title} </Link>
+注册路由（声明接收）：<Route path="/demo/test/:name/:age" component={Test}>
+<Route path="/home/message/detail/:id/:title" component={Detail} />
+接收参数：const {id,title} = this.props.match.params
+const { id, title } = this.props.match.params; // 然后渲染列表
+find() 方法的使用
+   const findResult = DetailDate.find((detailObj) => {
+      return detailObj.id === id; 
+    }); 对 DetailDate 进行查找，如果找到相同的 id 就返回一个结果给 findResult
+    content: {findResult.content} // 拿到匹配到 id 的 content 值
+search 参数
+ 路由链接：<Link to=`/home/message/detail/?id=${msgObj.id}`>详情<Link>
+<Link to={`/home/message/detail/?id=${msgObj.id}&title=${msgObj.title}`}> {msgObj.title} </Link> 
+注册路由：正常注册 <Route path="/home/message/detail component={Text}">
+<Route path="/home/message/detail" component={Detail} />
+接收参数：const {search} = this.props.location
+const { search } = this.props.location;
+获取到 search 是 urlencoded 编码字符串，借助：querystring-es3 库来解析
+ const { id, title } = qs.parse(search.slice(1)); // 需要引入 querystring-es3 
+state 参数
+路由链接：<Link to={{pathname="/home/message/",state:{name:"t"}}}>详情</Link>
+ <Link to={{pathname: "/home/message/detail",state: { id: msgObj.id, title: msgObj.title },}}> {msgObj.title} </Link>
+注册路由：正常注册即可 <Route path="/home/message/detail component={Text}">
+<Route path="/home/message/detail" component={Detail} />
+接收参数：this.props.location.state // 这个 state 是 location 上面的 state
+const { id, title } = this.props.location.state;
+注意：刷新也是可以使用，刷新也可以保留住参数
+push 和 replace 的区别
+push 是系统默认的是每次点击都会保留历史记录的
+如果开启 replace 模式，系统是不在保留历史记录，不能前进和后退
+<Link replace to={/home/message/detail}> {msgObj.title} </Link> // 开启 replace
+编程式路由导航
+借助 this.props.history 对象上的 API 对操作路由跳转，前进，后退
+this.props.history.push()，每次点击都会保留历史记录
+this.props.history.replace()，开启 replace 模式，系统不在保留历史记录
+this.props.history.goBack()，点击后可以后退一步操作
+this.props.history.goForward()，点击后可以前进一步操作
+this.props.history.go()，括号里面输入一个 number 值，可以跳转到第几部操作
+路由的原理
+就是点击路由链接引起路径的变化，然后能够被路由器检测到
+多次改变路径能够留下历史记录
+BrowserRouter
+BrowserRouter 是表示如果留下这个历史记录
+BrowserRouter 通过 H5 的 history API 留下历史记录
+BrowserRouter 的底层实现一直都在调用 histury 对象的一些方法
+HashRouter
+HashRoute  底层使用的是 url 的哈希值来实现，没有直接操作 history 上的 API 
+只要点击就正常写 /#/a/b/c 这种路径，点击时 # 后面的值，都不会发送给服务器
+WithRouter
+withRouter 让一般组件具备路由组件所持有的 API，返回值是一个新组件
+BrowserRouter 和 HashRouter 的区别
+底层原理不一样：
+BrowserRouter 使用的是 H5 的 history API 来实现的
+HashRouter 的路径包含 # 例如：localhost:3000/#/demo/test
+url / path 表现形式不一样
+BrowserRouter 的路径中没有 # 例如:ocalhost:3000/demo/test
+HashRouter 的路径包含 # 例如：localhost:3000/#/demo/test
+刷新后对路由 state 参数的影响
+BrowserRouter 没有任何影响，因为 state 保存在 history 对象中
+HashRouter 刷新后会导致路由 state 参数的丢失，只要刷新就丢失数据
+因为 HashRouter 没有用 location 的 history 的 API，所以不能保留历史记录
+HashRouter 可以用来解决一些路径错误相关的问题
+看文档学习 
+渲染的所有内容都需要放在 BrowserRouter 元素里面，需要把 App 放在里面
+添加 <Route> 标签，这些是组件之间的链接，应该放在 Switch 中包裹着
+添加 Swith 包裹，这些确保每次仅渲染一个组件
+<Route> 标签要加载哪个组件，只需要添加 path 属性和要用 component 加载的组件名
+为了给网站添加可以点击的链接，我们使用 React Route 中的 Link 元素
+Link 组件中使用 to="/" 进行链接，就具有可点击的链接
+点击页面中的链接不会刷新页面，只会做页面的局部刷新
+路由链接，点击 Link 标签后，就是更改了浏览器的地址
+路由中只要监测到浏览器路径的变化，由原来的 01 变为 02，被监测到就展示组件
+路由工作原理，靠浏览器的路径，只要更改路径，就会被监测，监测到就匹配组件
+路由中，每一个 Link 都会对应着一个组件，每一个路径对应着一个组件
+路由匹配的时候，path 中显示的 /home，点击后页面就会显示这个组件
+路由匹配通过 {key value} 展示 key 为 path="/home" / value 为 component={Home}
+一个路由就是一个映射关系（key:value）根据 key 决定给什么 value
+key 为路径 value 可能是 function 或者 component，用于展示页面内容
+路由工作过程：当浏览器的 path 变为 /home时，当前路由组件就会变为 Home 组件
+路由需要靠着浏览器的历史记录 history 才能很好的运行
+需要安装  react-router-dom@5.2.0 进行操作
+导航区的某一处导航项如果你点击了，就展示相应的内容
+点击导航区引起历史记录的路径发生变化，被路由器检测到，然后展示相应的组件
+react 中靠路由链接 <Link to="/home"></Link>实现切换组件
+必须在 Link 标签的外侧包裹一个 Route <Route> <Link></Link> <Route>
